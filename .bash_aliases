@@ -60,6 +60,16 @@ function mimir() {
       --build-doc | -bd)
         cd "$MIMIR_PATH/server/core" && npm run build-doc-local
         ;;
+      
+      ## install all dependencies
+      --install | -i)
+        cd "$MIMIR_PATH" && npm ci --unsafe-perm --ignore-scripts && npm run ci-many
+        ;;
+
+      ## Build kelda dev tool with local code
+      --build-kelda | -bk)
+        cd "$MIMIR_PATH" && cd clients/kelda && npm i && npm run build:tools && npm link
+        ;;
 
       ## Set local ip for kelda dev tool
       --set-local-ip | -s-lip)
@@ -104,8 +114,10 @@ function mimir() {
         echo "  --deploy-function, -df <functionName>"
         echo "                                 Deploy a specific lambda function (required)"
         echo "  --build-doc, -bd               Build api doc locally"
+        echo "  --install, -i                  Install all dependencies"
         echo ""
         echo "--------------------------kelda dev tools--------------------------"
+        echo "  --build-kelda, -bk             Build kelda developer tool with local code"
         echo "  --set-local-ip, -s-lip         Set the LOCALIP to current host ip"
         echo "  --view-local-ip, -v-lip        View the LOCALIP"
         echo "  --set-git-root, -s-git         Set the MIMIR_GIT_ROOT_DIR to current mimir git root folder path"
