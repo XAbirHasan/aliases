@@ -34,10 +34,8 @@ function mimir() {
 
       # Run mimir check
       --check | -ck)
-        cd "$MIMIR_PATH" && npm run check${2:+:}${2}
+        cd "$MIMIR_PATH" && npm run check${2:+:}${2} -- --max-parallel ${3:-5}
         ;;
-
-        # TODO: add max-parallel option
 
       # Run mimir test
       --test | -t)
@@ -98,8 +96,9 @@ function mimir() {
         echo "  --run, -r                      Run mimir app"
         echo "  --run2, -r2                    Run mimir app with serve2 (memory optimized)"
         echo "  --hook, -hk                    Run mimir clientHookTestServer"
-        echo "  --check, -ck [subsystemName]"
+        echo "  --check, -ck <subsystemName> <max-parallel>"
         echo "                                 Run mimir check (if 'subsystem' is provided then only run check for that)"
+        echo "                                 'max-parallel' default to '5'"
         echo "  --test, -t [updateMe]"
         echo "                                 Run mimir test"
         echo "  --deploy-function, -df <functionName>"
