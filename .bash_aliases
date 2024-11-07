@@ -46,6 +46,13 @@ function mimir() {
       --hook | -hk)
         cd "$MIMIR_PATH" && npm run clientHookTestServer
         ;;
+      
+      # Run eslint only diff changes
+      --eslint-diff | --lint-diff)
+        local branch="${2:-develop}"
+        local max_old_space="${3:-5120}"
+        cd "$MIMIR_PATH" && NODE_OPTIONS=--max-old-space-size=${max_old_space} npx eslint -- $(git diff ${branch} --name-only | grep -E '\.ts$|\.vue$')
+        ;;
 
       # Deploy mimir function
       --deploy-function | -df)
@@ -65,10 +72,20 @@ function mimir() {
       --install | -i)
         cd "$MIMIR_PATH" && npm ci --unsafe-perm --ignore-scripts && npm run ci-many
         ;;
-
+      
+       ## install all dependencies with script
+      --install2 | -i2)
+        cd "$MIMIR_PATH" && no-dep/install-all
+        ;;
+      
+      ## Build kelda dev tool with local code
+      --build-kelda-tool | -bk-t)
+        cd "$MIMIR_PATH" && cd clients/kelda && npm i && npm run build:tools && npm link
+        ;;
+      
       ## Build kelda dev tool with local code
       --build-kelda | -bk)
-        cd "$MIMIR_PATH" && cd clients/kelda && npm i && npm run build:tools && npm link
+        cd "$MIMIR_PATH" && cd clients/kelda && npm i && npm run build
         ;;
 
       ## Set local ip for kelda dev tool
@@ -115,9 +132,15 @@ function mimir() {
         echo "                                 Deploy a specific lambda function (required)"
         echo "  --build-doc, -bd               Build api doc locally"
         echo "  --install, -i                  Install all dependencies"
+        echo "  --install2, -i2                Install all dependencies with no-dep script"
+        echo "  --eslint-diff, --lint-diff <branch> <max-old-space>"
+        echo "                                 Run eslint only diff changes"
+        echo "                                  'branch' default to 'develop'"
+        echo "                                  'max-old-space' default to '5120'MB (5GB)"
         echo ""
         echo "--------------------------kelda dev tools--------------------------"
-        echo "  --build-kelda, -bk             Build kelda developer tool with local code"
+        echo "  --build-kelda , -bk            Build kelda with local code"
+        echo "  --build-kelda-tool , -bk-t     Build kelda developer tool with local code"
         echo "  --set-local-ip, -s-lip         Set the LOCALIP to current host ip"
         echo "  --view-local-ip, -v-lip        View the LOCALIP"
         echo "  --set-git-root, -s-git         Set the MIMIR_GIT_ROOT_DIR to current mimir git root folder path"
