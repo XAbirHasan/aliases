@@ -29,7 +29,7 @@ function mimir() {
       
       # Run mimir app with optimize one
       --run2 | -r2)
-        cd "$MIMIR_PATH" && npm run serve2
+        cd "$MIMIR_PATH" && npm run serve2 --no-schedule
         ;;
 
       # Run mimir check
@@ -51,7 +51,7 @@ function mimir() {
       --eslint-diff | --lint-diff)
         local branch="${2:-develop}"
         local max_old_space="${3:-5120}"
-        cd "$MIMIR_PATH" && NODE_OPTIONS=--max-old-space-size=${max_old_space} npx eslint -- $(git diff ${branch} --name-only | grep -E '\.ts$|\.vue$')
+        cd "$MIMIR_PATH" && NODE_OPTIONS=--max-old-space-size=${max_old_space} npx eslint --format summary -- $(git diff ${branch} --name-only | grep -E '\.ts$|\.vue$')
         ;;
 
       # Deploy mimir function
@@ -134,7 +134,7 @@ function mimir() {
         echo "  --install, -i                  Install all dependencies"
         echo "  --install2, -i2                Install all dependencies with no-dep script"
         echo "  --eslint-diff, --lint-diff <branch> <max-old-space>"
-        echo "                                 Run eslint only diff changes"
+        echo "                                 Run eslint only diff changes (.ts, .vue files)"
         echo "                                  'branch' default to 'develop'"
         echo "                                  'max-old-space' default to '5120'MB (5GB)"
         echo ""
