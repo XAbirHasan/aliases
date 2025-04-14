@@ -90,7 +90,14 @@ function mimir() {
 
       ## Set local ip for kelda dev tool
       --set-local-ip | -s-lip)
-        LOCALIP_WITHOUT_SPACE=$(echo `hostname -I` | tr -d ' ')
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+          LOCALIP_WITHOUT_SPACE=$(echo `hostname -I` | tr -d ' ')
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+          LOCALIP_WITHOUT_SPACE=$(ipconfig getifaddr en0)
+        else
+          echo "Unsupported OS type: $OSTYPE"
+          return 1
+        fi
         export LOCALIP=$LOCALIP_WITHOUT_SPACE
         echo "'The LOCALIP=$LOCALIP'"
         ;;
