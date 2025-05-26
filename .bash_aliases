@@ -98,7 +98,13 @@ function mimir() {
         if [[ "$OSTYPE" == "linux-gnu"* ]]; then
           LOCALIP_WITHOUT_SPACE=$(echo `hostname -I` | tr -d ' ')
         elif [[ "$OSTYPE" == "darwin"* ]]; then
-          LOCALIP_WITHOUT_SPACE=$(ipconfig getifaddr en0)
+          ip=$(ipconfig getifaddr en0)
+
+          # If ip is empty, try fallback method
+          if [ -z "$ip" ]; then
+            ip=$(/sbin/ifconfig -l | xargs -n1 ipconfig getifaddr 2>/dev/null | head -n1)
+          fi
+          LOCALIP_WITHOUT_SPACE=$(echo $ip | tr -d ' ')
         else
           echo "Unsupported OS type: $OSTYPE"
           return 1
