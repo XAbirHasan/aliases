@@ -1,5 +1,6 @@
 # Define your mimir path
-MIMIR_PATH="$HOME/Project/mimir"
+MIMIR_PATH="$HOME/mimir-stuff/mimir"
+MIMIR_KELDA_PATH="$HOME/mimir-stuff/kelda"
 
 # Define your error messsage
 MIMIR_WRONG_PATH_MESSAGE="Mimir is not available (wrong folder path)"
@@ -10,6 +11,10 @@ function mimir() {
       # go to mimir path in terminal
       --go | --find | -f)
         cd "$MIMIR_PATH"
+        ;;
+      # go to kelda path in terminal
+      --go-kelda | --find-kelda | -fk)
+        cd "$MIMIR_KELDA_PATH"
         ;;
 
       # Open mimir in VS code
@@ -125,6 +130,7 @@ function mimir() {
         echo "Options:"
         echo "--------------------------mimir development--------------------------"
         echo "  --go, --find, -f               Go to mimir path in terminal"
+        echo "  --go-kelda, --find-kelda, -fk  Go to kelda path in terminal" 
         echo "  --open, --code, -o             Open mimir in Visual Studio Code"
         echo "  --config, -c, --setting, -s    Configure mimir stacks and sub-system"
         echo "  --run, -r                      Run mimir app"
