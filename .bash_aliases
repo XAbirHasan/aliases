@@ -1,6 +1,6 @@
 # Define your mimir path
 MIMIR_PATH="$HOME/mimir-stuff/mimir"
-MIMIR_KELDA_PATH="$HOME/mimir-stuff/kelda"
+MIMIR_KELDA_PATH="$HOME/mimir-stuff/kelda"  
 
 # Define your error messsage
 MIMIR_WRONG_PATH_MESSAGE="Mimir is not available (wrong folder path)"
@@ -85,15 +85,24 @@ function mimir() {
       
       ## Build kelda dev tool with local code
       --build-kelda-tool | -bk-t)
-        cd "$MIMIR_PATH" && cd clients/kelda && npm i && npm run build:tools && npm link
+        cd "$MIMIR_PATH" && cd clients/kelda && npm run build:tools && npm link
         ;;
       
-      ## Build kelda dev tool with local code
+      ## Build kelda with local code
       --build-kelda | -bk)
-        cd "$MIMIR_PATH" && cd clients/kelda && npm i && npm run build
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+          echo "Building kelda for linux"
+          cd "$MIMIR_PATH" && cd clients/kelda && pnpm build && pnpm build:docker
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+          echo "Building kelda for macOS"
+          cd "$MIMIR_PATH" && cd clients/kelda && pnpm build && pnpm build:docker-aarch64
+        else
+          echo "Unsupported OS type: $OSTYPE"
+          return 1
+        fi
         ;;
 
-      ## Set local ip for kelda dev tool
+      ## Set local ip
       --set-local-ip | -s-lip)
         if [[ "$OSTYPE" == "linux-gnu"* ]]; then
           LOCALIP_WITHOUT_SPACE=$(echo `hostname -I` | tr -d ' ')
@@ -113,18 +122,18 @@ function mimir() {
         echo "'The LOCALIP=$LOCALIP'"
         ;;
 
-      ## View local ip for kelda dev tool
+      ## View local ip
       --view-local-ip | -v-lip)
         echo LOCALIP=$LOCALIP
         ;;
       
-      ## Set git root for kelda dev tool
+      ## Set mimir git root
       --set-git-root | -s-git)
         export MIMIR_GIT_ROOT_DIR=$MIMIR_PATH
         echo "Your git root set to:$MIMIR_GIT_ROOT_DIR"
         ;;
       
-      ## View git root for kelda dev tool
+      ## View mimir git root
       --view-git-root | -v-git)
         echo "Your git root is:$MIMIR_GIT_ROOT_DIR"
         ;;
