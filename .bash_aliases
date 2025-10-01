@@ -95,6 +95,11 @@ function mimir() {
         cd "$MIMIR_PATH" && no-dep/install-all
         ;;
       
+      ## build mtools with local code
+      --build-mtools | -bm)
+        cd "$MIMIR_PATH" && cd clients/mtools && npm run build && npm link
+        ;;
+
       ## Build kelda dev tool with local code
       --build-kelda-tool | -bk-t)
         cd "$MIMIR_PATH" && cd clients/kelda && npm run build:tools && npm link
@@ -200,6 +205,7 @@ function mimir() {
         echo "  --build-doc, -bd               Build api doc locally"
         echo "  --install, -i                  Install all dependencies"
         echo "  --install2, -i2                Install all dependencies with no-dep script"
+        echo "  --build-mtools, -bm            Build mtools with local code and link"
         echo "  --eslint-diff, --lint-diff <branch> <max-old-space>"
         echo "                                 Run eslint only diff changes (.ts, .vue files)"
         echo "                                  'branch' default to 'develop'"
