@@ -5,6 +5,18 @@ MIMIR_KELDA_PATH="$HOME/mimir-stuff/kelda"
 # Define your error messsage
 MIMIR_WRONG_PATH_MESSAGE="Mimir is not available (wrong folder path)"
 
+
+_mimir_clean_pnpm_cache() {
+  echo "Cleaning pnpm cache..."
+  rm -rf .build .pnpm-lock.yaml $HOME/.cache/pnpm $HOME/.local/share/pnpm
+}
+
+_clean_directories() {
+  local dir_name="$1"
+  echo "Removing all '$dir_name' directories..."
+  find . -type d -name "$dir_name" -prune -exec rm -rf '{}' +
+}
+
 function mimir() {
   if [ -d "$MIMIR_PATH" ]; then
     case "$1" in
@@ -137,6 +149,33 @@ function mimir() {
       --view-git-root | -v-git)
         echo "Your git root is:$MIMIR_GIT_ROOT_DIR"
         ;;
+      
+      ## clean pnpm cache
+      --clean-pnpm-cache | -c-pnpm)
+        cd "$MIMIR_PATH" && _mimir_clean_pnpm_cache
+        ;;
+      
+      ## clean node_modules
+      --clean-node-modules | -c-nm)
+        cd "$MIMIR_PATH" && _clean_directories "node_modules"
+        ;;
+      
+      ## clean build files
+      --clean-build | -c-b)
+        cd "$MIMIR_PATH" && \
+        _clean_directories ".build" && \
+        _clean_directories ".cache"
+        ;;
+      
+      ## clean all
+      --clean-all | -c-all)
+        cd "$MIMIR_PATH" && \
+        _mimir_clean_pnpm_cache && \
+        _clean_directories "node_modules" && \
+        _clean_directories ".build" && \
+        _clean_directories ".cache" && \
+        echo "All cleaned!"
+        ;;
 
       # Help option
       --help | -h)
@@ -173,6 +212,12 @@ function mimir() {
         echo "  --view-local-ip, -v-lip        View the LOCALIP"
         echo "  --set-git-root, -s-git         Set the MIMIR_GIT_ROOT_DIR to current mimir git root folder path"
         echo "  --view-git-root, -v-git        View the MIMIR_GIT_ROOT_DIR"
+        echo ""
+        echo "--------------------------cleaning--------------------------"
+        echo "  --clean-pnpm-cache, -c-pnpm    Clean pnpm cache and build files"
+        echo "  --clean-node-modules, -c-nm    Remove all node_modules directories"
+        echo "  --clean-build, -c-b            Remove all .build and .cache directories recursively"
+        echo "  --clean-all, -c-all            Clean everything (pnpm cache + node_modules + build files)"
         echo ""
         echo "------------------------------------------------------------------"
         echo "  --help, -h                     Show help"
