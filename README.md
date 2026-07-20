@@ -4,6 +4,7 @@ This repo contains useful command shortcuts to increase your productivity.
 
 - Mimir-related commands start with `mimir`. Use `mimir -h` to see all available commands.
 - Ram consumption-related commands start with `node-eat`. Use `node-eat -h` to see all available commands.
+- `LOCALIP` and `MIMIR_GIT_ROOT_DIR` are exported automatically every time a new terminal loads this file (no need to run `mimir --set-local-ip` / `mimir --set-git-root` yourself). Re-run them manually only if your network changes mid-session.
 
 Feel free to modify and make your own alias. [How to create a bash alias](https://linuxize.com/post/how-to-create-bash-aliases/)
 
