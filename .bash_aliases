@@ -1,6 +1,6 @@
 # Define your mimir path
 MIMIR_PATH="$HOME/mimir-stuff/mimir"
-MIMIR_KELDA_PATH="$HOME/mimir-stuff/kelda"  
+MIMIR_KELDA_PATH="$HOME/mimir-stuff/kelda"
 
 # Define your error messsage
 MIMIR_WRONG_PATH_MESSAGE="Mimir is not available (wrong folder path)"
@@ -38,12 +38,12 @@ function mimir() {
       --config | -c | --setting | -s)
         cd "$MIMIR_PATH" && npm run configure
         ;;
-      
+
       # Run mimir app
       --run | -r)
         cd "$MIMIR_PATH" && npm run serve
         ;;
-      
+
       # Run mimir app with optimize one
       --run2 | -r2)
         cd "$MIMIR_PATH" && npm run serve2 --no-schedule
@@ -63,7 +63,7 @@ function mimir() {
       --hook | -hk)
         cd "$MIMIR_PATH" && npm run clientHookTestServer
         ;;
-      
+
       # Run eslint only diff changes
       --eslint-diff | --lint-diff)
         local branch="${2:-develop}"
@@ -79,37 +79,37 @@ function mimir() {
           npx env-cmd -f ../../.env sls deploy -f $2 --verbose
         fi
         ;;
-      
+
       ## Build api doc locally
       --build-doc | -bd)
         cd "$MIMIR_PATH/server/core" && npm run build-doc-local
         ;;
-      
+
       ## install all dependencies
       --install | -i)
         cd "$MIMIR_PATH" && npm ci --unsafe-perm --ignore-scripts && npm run ci-many
         ;;
-      
+
        ## install all dependencies with script
       --install2 | -i2)
         cd "$MIMIR_PATH" && no-dep/install-all
         ;;
-      
+
       ## build mtools with local code
       --build-mtools | -bm)
         cd "$MIMIR_PATH" && cd clients/mtools && npm run build && npm link
         ;;
-      
+
       ## build localstage and link
       --build-localstage | -bls)
         cd "$MIMIR_PATH" && cd environments && npm run build:tools && npm link
-        ;;  
+        ;;
 
       ## Build kelda dev tool with local code
       --build-kelda-tool | -bk-t)
         cd "$MIMIR_PATH" && cd clients/kelda && npm run build:tools && npm link
         ;;
-      
+
       ## Build kelda with local code
       --build-kelda | -bk)
         if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -117,7 +117,7 @@ function mimir() {
           cd "$MIMIR_PATH" && cd clients/kelda && pnpm build && pnpm build:docker
         elif [[ "$OSTYPE" == "darwin"* ]]; then
           echo "Building kelda for macOS"
-          cd "$MIMIR_PATH" && cd clients/kelda && pnpm build && pnpm build:docker-aarch64
+          cd "$MIMIR_PATH" && cd clients/kelda && pnpm build && pnpm build:docker
         else
           echo "Unsupported OS type: $OSTYPE"
           return 1
@@ -148,35 +148,35 @@ function mimir() {
       --view-local-ip | -v-lip)
         echo LOCALIP=$LOCALIP
         ;;
-      
+
       ## Set mimir git root
       --set-git-root | -s-git)
         export MIMIR_GIT_ROOT_DIR=$MIMIR_PATH
         echo "Your git root set to:$MIMIR_GIT_ROOT_DIR"
         ;;
-      
+
       ## View mimir git root
       --view-git-root | -v-git)
         echo "Your git root is:$MIMIR_GIT_ROOT_DIR"
         ;;
-      
+
       ## clean pnpm cache
       --clean-pnpm-cache | -c-pnpm)
         cd "$MIMIR_PATH" && _mimir_clean_pnpm_cache
         ;;
-      
+
       ## clean node_modules
       --clean-node-modules | -c-nm)
         cd "$MIMIR_PATH" && _clean_directories "node_modules"
         ;;
-      
+
       ## clean build files
       --clean-build | -c-b)
         cd "$MIMIR_PATH" && \
         _clean_directories ".build" && \
         _clean_directories ".cache"
         ;;
-      
+
       ## clean all
       --clean-all | -c-all)
         cd "$MIMIR_PATH" && \
@@ -194,7 +194,7 @@ function mimir() {
         echo "Options:"
         echo "--------------------------mimir development--------------------------"
         echo "  --go, --find, -f               Go to mimir path in terminal"
-        echo "  --go-kelda, --find-kelda, -fk  Go to kelda path in terminal" 
+        echo "  --go-kelda, --find-kelda, -fk  Go to kelda path in terminal"
         echo "  --open, --code, -o             Open mimir in Visual Studio Code"
         echo "  --config, -c, --setting, -s    Configure mimir stacks and sub-system"
         echo "  --run, -r                      Run mimir app"
